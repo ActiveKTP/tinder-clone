@@ -29,7 +29,7 @@ const ChatRow = ({ matchDetails }) => {
         <TouchableOpacity
             style={styles.cardShadow}
             className="flex-row items-center py-3 px-5 bg-white mx-3 my-1 rounded-lg"
-            onPress={() => navigation.navigate('Message', { matchDetails })}
+            onPress={() => navigation.navigate('Message', { matchDetails, userReceive: matchedUserInfo })}
         >
             <Image
                 className="rounded-full h-16 w-16 mr-4"

@@ -4,6 +4,7 @@ import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google';
 import { GoogleAuthProvider, signInWithCredential, onAuthStateChanged, signOut } from 'firebase/auth';
 import { auth } from '../firebase';
+import { useNotifications } from './useNotifications';
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -25,9 +26,11 @@ export const AuthProvider = ({ children }) => {
     const [loadingInitial, setLoadingInitial] = useState(true);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [pushToken, setPushToken] = useState(null);
 
     const [request, response, signInWithGoogle] = Google.useAuthRequest(config);
     //const [request, response, signInWithGoogle] = Google.useIdTokenAuthRequest(config);
+    const { registerForPushNotificationsAsync } = useNotifications();
 
     useEffect(() => {
         if (response?.type === "success") {
@@ -56,8 +59,14 @@ export const AuthProvider = ({ children }) => {
 
     async function firebaseSingIn() {
         const credential = GoogleAuthProvider.credential(idToken, accessToken);
-        console.log(credential)
+        //console.log(credential)
         await signInWithCredential(auth, credential);
+        //console.log(signInResult)
+        // set addPushTokenListener
+        await registerForPushNotificationsAsync().then((response) => {
+            setPushToken(response);
+            //console.log(response);
+        });
     }
 
     const logInClick = () => {
@@ -76,17 +85,20 @@ export const AuthProvider = ({ children }) => {
         user,
         loading,
         error,
+        pushToken,
         signInWithGoogle,
         logInClick,
         logout
     }), [user,
         loading,
-        error,])
+        error,
+        pushToken,])
 
     //console.log(response);
     //console.log(idToken);
     //console.log(loading);
     //console.log(user);
+    //console.log(pushToken);
 
     return (
         <AuthContext.Provider

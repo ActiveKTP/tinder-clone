@@ -156,7 +156,7 @@ const HomeScreen = () => {
                 </TouchableOpacity>
 
                 <TouchableOpacity onPress={() => navigation.navigate("Modal")}>
-                    <Image className="h-14 w-14" source={require("../assets/tinder-logo.png")} />
+                    <Image className="h-14 w-14" source={require("../assets/favicon.png")} />
                 </TouchableOpacity>
 
                 <TouchableOpacity onPress={() => navigation.navigate("Chat")}>

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from './screens/HomeScreen';
 import ChatScreen from './screens/ChatScreen';
@@ -7,11 +7,32 @@ import useAuth from './hooks/useAuth';
 import ModalScreen from './screens/ModalScreen';
 import MatchedScreen from './screens/MatchedScreen';
 import MessageScreen from './screens/MessageScreen';
+import * as Notifications from 'expo-notifications'
+import { useNotifications } from './hooks/useNotifications';
 
 const Stack = createNativeStackNavigator();
 
 const StackNavigation = () => {
     const { user } = useAuth();
+    const { registerForPushNotificationsAsync, handleNotificationResponse } = useNotifications();
+
+    useEffect(() => {
+        //registerForPushNotificationsAsync().then((response) => { console.log(response) })
+        Notifications.setNotificationHandler({
+            handleNotification: async () => ({
+                shouldShowAlert: true,
+                shouldPlaySound: true,
+                shouldSetBadge: true,
+            }),
+        });
+
+        const responseListener = Notifications.addNotificationResponseReceivedListener(handleNotificationResponse);
+
+        return () => {
+            if (responseListener) Notifications.removeNotificationSubscription(responseListener);
+        }
+    }, [])
+
 
     return (
         <Stack.Navigator

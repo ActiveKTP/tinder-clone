@@ -13,8 +13,7 @@ import { db } from '../firebase';
 const MessageScreen = () => {
     const { user } = useAuth();
     const { params } = useRoute();
-    const { matchDetails } = params;
-
+    const { matchDetails, userReceive } = params;
     const [input, setInput] = useState("");
     const [message, setMessage] = useState("");
 
@@ -39,6 +38,7 @@ const MessageScreen = () => {
             displayName: user.displayName,
             photoURL: matchDetails.users[user.uid].photoURL,
             message: input,
+            userReceive: userReceive
         }
         );
         setInput("");

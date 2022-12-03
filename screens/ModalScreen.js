@@ -8,7 +8,7 @@ import { useNavigation } from '@react-navigation/native';
 
 const ModalScreen = () => {
     const navigation = useNavigation();
-    const { user } = useAuth();
+    const { user, pushToken } = useAuth();
     const [image, setImage] = useState(null)
     const [job, setJob] = useState(null)
     const [age, setAge] = useState(null)
@@ -22,9 +22,10 @@ const ModalScreen = () => {
             photoURL: image,
             job: job,
             age: age,
+            pushToken: pushToken ? pushToken : "",
             timestamp: serverTimestamp()
         };
-        //console.log(userProfile)
+        console.log(userProfile)
         setDoc(doc(db, 'users', user.uid), userProfile)
             .then(() => {
                 navigation.navigate("Home");
